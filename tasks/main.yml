@@ -1,21 +1,21 @@
 ---
- - name: Delete {{ display_name }} statefulset
+ - name: Delete {{ name }} statefulset
    shell: "kubectl delete statefulset {{ name }} --namespace={{ ns }}"
    ignore_errors: yes
 
- - name: Wait for {{ display_name }} pods to be deleted
+ - name: Wait for {{ name }} pods to be deleted
    shell: "kubectl get pods --namespace={{ ns }}"
    register: result
    until: result.stdout.find(name) == -1
    retries: "{{ retry.max }}"
    delay: "{{ retry.delay }}"
 
- - name: Wait for {{ display_name }} statefulset to be deleted
+ - name: Wait for {{ name }} statefulset to be deleted
    shell: "kubectl get statefulsets --namespace={{ ns }}"
    register: result
    until: result.stdout.find(name) == -1
    retries: "{{ retry.max }}"
    delay: "{{ retry.delay }}"
 
- - name: Create {{ display_name }} statefulset
+ - name: Create {{ name }} statefulset
    shell: "kubectl create -f {{ yamls }}/{{ name }}-statefulset.yml"
